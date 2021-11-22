@@ -69,6 +69,20 @@ export default function App () {
     }
 
     // check diagonals
+    let isDiagonal1OWinning = true
+    let isDiagonal1XWinning = true
+    let isDiagonal2OWinning = true
+    let isDiagonal2XWinning = true
+
+    for (let i = 0; i < 3; i++) {
+      if (grid[i][i] !== 'o') {
+        isDiagonal1OWinning = false
+      }
+
+      if (grid[i][i] !== 'x') {
+        isDiagonal1XWinning = false
+      }
+    }
   }
 
   return (
