@@ -14,17 +14,15 @@ export default function App () {
   const onPress = (rowIndex, columnIndex) => {
     if (grid[rowIndex][columnIndex] !== '') {
       console.log('position already occupied')
+    } else {
+      setGrid((existingGrid) => {
+        const updateGrid = [...existingGrid]
+        updateGrid[rowIndex][columnIndex] = currentTurn
+        return updateGrid
+      })
+      setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
+      checkWinningState()
     }
-
-    setGrid((existingGrid) => {
-      const updateGrid = [...existingGrid]
-      updateGrid[rowIndex][columnIndex] = currentTurn
-      return updateGrid
-    })
-
-    setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
-
-    checkWinningState()
   }
 
   const checkWinningState = () => {
@@ -34,9 +32,15 @@ export default function App () {
 
       const isRowOWinning = grid[row].every(cell => cell === 'o')
 
-      if (isRowXWinning) Alert.alert('X won!')
+      if (isRowXWinning) {
+        Alert.alert('X won!')
+        break
+      }
 
-      if (isRowOWinning) Alert.alert('O won!')
+      if (isRowOWinning) {
+        Alert.alert('O won!')
+        break
+      }
     }
 
     //  checks colums
@@ -44,7 +48,7 @@ export default function App () {
       let isColumnXwinner = true
       let isColumnOwinner = true
 
-      for (let row = 0; row < 3; ) {
+      for (let row = 0; row < 3; row++) {
         if (grid[row][col] !== 'x') {
           isColumnXwinner = false
         }
@@ -55,13 +59,16 @@ export default function App () {
 
       if (isColumnXwinner) {
         Alert.alert('X winner!')
+        break
       }
 
       if (isColumnOwinner) {
         Alert.alert('O winner!')
+        break
       }
     }
-    //  check diagonals
+
+    // check diagonals
   }
 
   return (

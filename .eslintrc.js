@@ -1,4 +1,10 @@
 module.exports = {
-  root: true,
-  extends: './node_modules/standard/eslintrc.json'
+  env: {
+    browser: true,
+    es2021: true,
+    jest: true
+  },
+  extends: [
+    './node_modules/standard/eslintrc.json'
+  ]
 }
