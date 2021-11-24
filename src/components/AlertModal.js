@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgb(224, 224, 224)',
     padding: 20,
     borderRadius: 10
   },
