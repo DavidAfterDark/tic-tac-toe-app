@@ -27,28 +27,29 @@ const Game = () => {
         updateGrid[rowIndex][columnIndex] = currentTurn
         return updateGrid
       })
+
       setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
-      checkWinningState()
-      checkTieState()
+
+      const winner = getWinner()
+
+      if (winner) {
+        gameWon(winner)
+      } else {
+        checkTieState()
+      }
     }
   }
 
-  const checkWinningState = () => {
+  const getWinner = () => {
     //  check rows
     for (let row = 0; row < 3; row++) {
       const isRowXWinning = grid[row].every(cell => cell === 'x')
 
       const isRowOWinning = grid[row].every(cell => cell === 'o')
 
-      if (isRowXWinning) {
-        playerXWin()
-        break
-      }
+      if (isRowXWinning) return 'x'
 
-      if (isRowOWinning) {
-        playerOWin()
-        break
-      }
+      if (isRowOWinning) return 'o'
     }
 
     //  checks colums
@@ -65,15 +66,9 @@ const Game = () => {
         }
       }
 
-      if (isColumnXwinner) {
-        playerXWin()
-        break
-      }
+      if (isColumnXwinner) return 'x'
 
-      if (isColumnOwinner) {
-        playerOWin()
-        break
-      }
+      if (isColumnOwinner) return 'o'
     }
 
     //  check diagonals
@@ -100,18 +95,16 @@ const Game = () => {
       }
     }
 
-    if (isDiagonalLeftOWinning || isDiagonalRightOWinning) playerOWin()
+    if (isDiagonalLeftXWinning || isDiagonalRightXWinning) return 'x'
 
-    if (isDiagonalLeftXWinning || isDiagonalRightXWinning) playerXWin()
+    if (isDiagonalLeftOWinning || isDiagonalRightOWinning) return 'o'
   }
 
   const checkTieState = () => {
     if (!grid.some(row => row.some(cell => cell === ''))) inATie()
   }
 
-  const playerXWin = () => setMessage('🏆  Player X Win!')
-
-  const playerOWin = () => setMessage('🏆 Player O Win!')
+  const gameWon = (player) => setMessage(`🏆  Player ${player} Win!`)
 
   const inATie = () => setMessage('(⊙_⊙;)  its a tie!')
 
