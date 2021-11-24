@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ImageBackground, StatusBar, Pressable } from 'react-native'
+import { View, StyleSheet, ImageBackground, StatusBar, Pressable, Text } from 'react-native'
 import background from '../assets/images/background.jpeg'
 
 //  components
@@ -118,6 +118,7 @@ const Game = () => {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor='transparent' barStyle='light-content' />
       <ImageBackground source={background} style={styles.background} resizeMode='contain'>
+        <Text style={styles.currentTurn}>Current turn: {currentTurn.toLocaleUpperCase()}</Text>
         <View style={styles.gridContainer}>
           {grid.map((row, rowIndex) => (
             <View key={`row-${rowIndex}`} style={styles.row}>
@@ -164,6 +165,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 18
+  },
+
+  currentTurn: {
+    fontSize: 32,
+    color: '#fff',
+    position: 'absolute',
+    top: 50
   },
 
   gridContainer: {
