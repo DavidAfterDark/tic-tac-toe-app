@@ -16,7 +16,7 @@ const Game = () => {
 
   const [currentTurn, setCurrentTurn] = useState('x')
 
-  const [winMessage, setWinMessage] = useState('')
+  const [message, setMessage] = useState('')
 
   const onPress = (rowIndex, columnIndex) => {
     if (grid[rowIndex][columnIndex] !== '') {
@@ -29,6 +29,7 @@ const Game = () => {
       })
       setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
       checkWinningState()
+      checkTieState()
     }
   }
 
@@ -99,23 +100,25 @@ const Game = () => {
       }
     }
 
-    if (isDiagonalLeftOWinning) playerOWin()
+    if (isDiagonalLeftOWinning || isDiagonalRightOWinning) playerOWin()
 
-    if (isDiagonalLeftXWinning) playerXWin()
-
-    if (isDiagonalRightOWinning) playerOWin()
-
-    if (isDiagonalRightXWinning) playerXWin()
+    if (isDiagonalLeftXWinning || isDiagonalRightXWinning) playerXWin()
   }
 
-  const playerXWin = () => setWinMessage('🏆 Player X Win!')
+  const checkTieState = () => {
+    if (!grid.some(row => row.some(cell => cell === ''))) inATie()
+  }
 
-  const playerOWin = () => setWinMessage('🏆 Player O Win!')
+  const playerXWin = () => setMessage('🏆  Player X Win!')
+
+  const playerOWin = () => setMessage('🏆 Player O Win!')
+
+  const inATie = () => setMessage('(⊙_⊙;)  its a tie!')
 
   const resetGame = () => {
     setGrid(initialState)
     setCurrentTurn('x')
-    setWinMessage('')
+    setMessage('')
   }
 
   return (
@@ -144,8 +147,8 @@ const Game = () => {
           ))}
         </View>
         <AlertModal
-          visible={!!winMessage}
-          message={winMessage}
+          visible={!!message}
+          message={message}
           button
           onPressButton={resetGame}
         />
