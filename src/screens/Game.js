@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ImageBackground, StatusBar, Pressable, Text } from 'react-native'
+import { View, StyleSheet, ImageBackground, StatusBar, Text } from 'react-native'
 import background from '../assets/images/background.jpeg'
 
 //  components
 import AlertModal from '../components/AlertModal'
+import Cell from '../components/Cell'
 
 const Game = () => {
   const initialState = [
@@ -104,7 +105,7 @@ const Game = () => {
     if (!grid.some(row => row.some(cell => cell === ''))) inATie()
   }
 
-  const gameWon = (player) => setMessage(`🏆  Player ${player} Win!`)
+  const gameWon = (player) => setMessage(`🏆  Player ${player.toLocaleUpperCase()} Win!`)
 
   const inATie = () => setMessage('(⊙_⊙;)  its a tie!')
 
@@ -123,19 +124,11 @@ const Game = () => {
           {grid.map((row, rowIndex) => (
             <View key={`row-${rowIndex}`} style={styles.row}>
               {row.map((cell, columnIndex) => (
-                <Pressable
-                  style={styles.cell}
-                  key={`row-${rowIndex}column-${columnIndex}`}
+                <Cell
+                  key={`row-${rowIndex}-column-${columnIndex}`}
                   onPress={() => onPress(rowIndex, columnIndex)}
-                >
-                  {cell === 'o' && <View style={styles.circle} />}
-                  {cell === 'x' && (
-                    <View style={styles.cross}>
-                      <View style={styles.crossLine} />
-                      <View style={[styles.crossLine, styles.crossLineReverse]} />
-                    </View>
-                  )}
-                </Pressable>
+                  cell={cell}
+                />
               ))}
             </View>
           ))}
@@ -183,46 +176,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     margin: 4
-  },
-
-  cell: {
-    flex: 1,
-    width: 100,
-    height: 100,
-    borderWidth: 16,
-    borderColor: 'transparent'
-  },
-
-  circle: {
-    width: 75,
-    height: 75,
-    borderRadius: 50,
-    borderColor: 'white',
-    borderWidth: 10
-  },
-
-  cross: {
-    width: 75,
-    height: 75,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  crossLine: {
-    position: 'absolute',
-    width: 10,
-    height: 75,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    transform: [{
-      rotate: '45deg'
-    }]
-  },
-
-  crossLineReverse: {
-    transform: [{
-      rotate: '-45deg'
-    }]
   }
 })
 
