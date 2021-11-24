@@ -23,7 +23,7 @@ const Game = () => {
     if (currentTurn === 'o') {
       setTimeout(() => {
         botTurn()
-      }, 800)
+      }, 500)
     }
   }, [currentTurn])
 
@@ -39,7 +39,7 @@ const Game = () => {
 
       setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
 
-      const winner = getWinner()
+      const winner = getWinner(grid)
 
       if (winner) {
         gameWon(winner)
@@ -49,12 +49,12 @@ const Game = () => {
     }
   }
 
-  const getWinner = () => {
+  const getWinner = (winnerGrid) => {
     //  check rows
     for (let row = 0; row < 3; row++) {
-      const isRowXWinning = grid[row].every(cell => cell === 'x')
+      const isRowXWinning = winnerGrid[row].every(cell => cell === 'x')
 
-      const isRowOWinning = grid[row].every(cell => cell === 'o')
+      const isRowOWinning = winnerGrid[row].every(cell => cell === 'o')
 
       if (isRowXWinning) return 'x'
 
@@ -67,10 +67,10 @@ const Game = () => {
       let isColumnOwinner = true
 
       for (let row = 0; row < 3; row++) {
-        if (grid[row][col] !== 'x') {
+        if (winnerGrid[row][col] !== 'x') {
           isColumnXwinner = false
         }
-        if (grid[row][col] !== 'o') {
+        if (winnerGrid[row][col] !== 'o') {
           isColumnOwinner = false
         }
       }
@@ -87,19 +87,19 @@ const Game = () => {
     let isDiagonalRightXWinning = true
 
     for (let i = 0; i < 3; i++) {
-      if (grid[i][i] !== 'o') {
+      if (winnerGrid[i][i] !== 'o') {
         isDiagonalLeftOWinning = false
       }
 
-      if (grid[i][i] !== 'x') {
+      if (winnerGrid[i][i] !== 'x') {
         isDiagonalLeftXWinning = false
       }
 
-      if (grid[i][2 - i] !== 'o') {
+      if (winnerGrid[i][2 - i] !== 'o') {
         isDiagonalRightOWinning = false
       }
 
-      if (grid[i][2 - i] !== 'x') {
+      if (winnerGrid[i][2 - i] !== 'x') {
         isDiagonalRightXWinning = false
       }
     }
@@ -133,6 +133,11 @@ const Game = () => {
         }
       })
     ))
+
+    //  defend
+    //  check if the opponents Wins if it takes one of the possible positions
+    // possibleOptions.forEach(possibleOptions => {
+    // })
 
     //  choose the best options
     const chooseOptions = possibleOptions[Math.floor(Math.random() * possibleOptions.length)]
