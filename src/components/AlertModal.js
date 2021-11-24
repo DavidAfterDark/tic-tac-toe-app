@@ -10,6 +10,7 @@ const AlertModal = ({ visible, message, button, onPressButton }) => {
       visible={visible}
       transparent
       statusBarTranslucent
+      animationType='fade'
     >
       <View style={styles.container}>
         <View style={styles.body}>

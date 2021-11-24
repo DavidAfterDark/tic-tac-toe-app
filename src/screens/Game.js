@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, ImageBackground, StatusBar, Text } from 'react-native'
 import background from '../assets/images/background.jpeg'
 
@@ -18,6 +18,14 @@ const Game = () => {
   const [currentTurn, setCurrentTurn] = useState('x')
 
   const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    if (currentTurn === 'o') {
+      setTimeout(() => {
+        botTurn()
+      }, 800)
+    }
+  }, [currentTurn])
 
   const onPress = (rowIndex, columnIndex) => {
     if (grid[rowIndex][columnIndex] !== '') {
@@ -113,6 +121,25 @@ const Game = () => {
     setGrid(initialState)
     setCurrentTurn('x')
     setMessage('')
+  }
+
+  const botTurn = () => {
+    //  collect all possible options
+    const possibleOptions = []
+    grid.forEach((row, rowIndex) => (
+      row.forEach((cell, columnIndex) => {
+        if (cell === '') {
+          possibleOptions.push({ row: rowIndex, col: columnIndex })
+        }
+      })
+    ))
+
+    //  choose the best options
+    const chooseOptions = possibleOptions[Math.floor(Math.random() * possibleOptions.length)]
+
+    if (chooseOptions) {
+      onPress(chooseOptions.row, chooseOptions.col)
+    }
   }
 
   return (
