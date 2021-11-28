@@ -6,6 +6,9 @@ import background from '../assets/images/background.jpeg'
 import AlertModal from '../components/AlertModal'
 import Cell from '../components/Cell'
 
+//  utils
+import { copyArray } from '../utils/copyArray'
+
 const Game = () => {
   const initialState = [
     ['', '', ''], // 1st row
@@ -27,6 +30,16 @@ const Game = () => {
     }
   }, [currentTurn])
 
+  useEffect(() => {
+    const winner = getWinner(grid)
+
+    if (winner) {
+      gameWon(winner)
+    } else {
+      checkTieState()
+    }
+  }, [grid])
+
   const onPress = (rowIndex, columnIndex) => {
     if (grid[rowIndex][columnIndex] !== '') {
       console.log('position already occupied')
@@ -38,14 +51,6 @@ const Game = () => {
       })
 
       setCurrentTurn(currentTurn === 'x' ? 'o' : 'x')
-
-      const winner = getWinner(grid)
-
-      if (winner) {
-        gameWon(winner)
-      } else {
-        checkTieState()
-      }
     }
   }
 
@@ -134,13 +139,44 @@ const Game = () => {
       })
     ))
 
-    //  defend
-    //  check if the opponents Wins if it takes one of the possible positions
-    // possibleOptions.forEach(possibleOptions => {
-    // })
+    let chooseOptions
 
-    //  choose the best options
-    const chooseOptions = possibleOptions[Math.floor(Math.random() * possibleOptions.length)]
+    //  ↓↓↓ check if the opponents Wins if it takes one of the possible positions ↓↓↓
+
+    //  attack
+    possibleOptions.forEach((possibleOption) => {
+      const copyGrid = copyArray(grid)
+
+      copyGrid[possibleOption.row][possibleOption.col] = 'o'
+
+      const winner = getWinner(copyGrid)
+
+      if (winner === 'o') {
+        //  attack that position
+        chooseOptions = possibleOption
+      }
+    })
+
+    if (!chooseOptions) {
+      //  defend
+      possibleOptions.forEach((possibleOption) => {
+        const copyGrid = copyArray(grid)
+
+        copyGrid[possibleOption.row][possibleOption.col] = 'x'
+
+        const winner = getWinner(copyGrid)
+
+        if (winner === 'x') {
+          //  defend that position
+          chooseOptions = possibleOption
+        }
+      })
+    }
+
+    //  choose random
+    if (!chooseOptions) {
+      chooseOptions = possibleOptions[Math.floor(Math.random() * possibleOptions.length)]
+    }
 
     if (chooseOptions) {
       onPress(chooseOptions.row, chooseOptions.col)
@@ -151,7 +187,12 @@ const Game = () => {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor='transparent' barStyle='light-content' />
       <ImageBackground source={background} style={styles.background} resizeMode='contain'>
-        <Text style={styles.currentTurn}>Current turn: {currentTurn.toLocaleUpperCase()}</Text>
+        <View style={styles.currentTurnContainer}>
+          <Text style={styles.currentTurn}>Current turn: </Text>
+          <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? 'blue' : 'red', fontWeight: '700' }]}>
+            {currentTurn.toLocaleUpperCase()}
+          </Text>
+        </View>
         <View style={styles.gridContainer}>
           {grid.map((row, rowIndex) => (
             <View key={`row-${rowIndex}`} style={styles.row}>
@@ -192,11 +233,15 @@ const styles = StyleSheet.create({
     paddingTop: 18
   },
 
-  currentTurn: {
-    fontSize: 32,
-    color: '#fff',
+  currentTurnContainer: {
+    flexDirection: 'row',
     position: 'absolute',
     top: 50
+  },
+
+  currentTurn: {
+    fontSize: 32,
+    color: '#fff'
   },
 
   gridContainer: {
