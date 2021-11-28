@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, ImageBackground, StatusBar, Text } from 'react-native'
-import background from '../assets/images/background.jpeg'
+import { View, StyleSheet, Text } from 'react-native'
 
 //  components
+import BackgroundContainer from '../components/BackgroundContainer'
 import AlertModal from '../components/AlertModal'
 import Cell from '../components/Cell'
 
@@ -184,36 +184,33 @@ const Game = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar translucent backgroundColor='transparent' barStyle='light-content' />
-      <ImageBackground source={background} style={styles.background} resizeMode='contain'>
-        <View onPres={() => console.log('touch')} style={styles.currentTurnContainer}>
-          <Text style={styles.currentTurn}>Current turn: </Text>
-          <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? 'blue' : 'red', fontWeight: '700' }]}>
-            {currentTurn.toLocaleUpperCase()}
-          </Text>
-        </View>
-        <View style={styles.gridContainer}>
-          {grid.map((row, rowIndex) => (
-            <View key={`row-${rowIndex}`} style={styles.row}>
-              {row.map((cell, columnIndex) => (
-                <Cell
-                  key={`row-${rowIndex}-column-${columnIndex}`}
-                  onPress={() => onPress(rowIndex, columnIndex)}
-                  cell={cell}
-                />
-              ))}
-            </View>
-          ))}
-        </View>
-        <AlertModal
-          visible={!!message}
-          message={message}
-          button
-          onPressButton={resetGame}
-        />
-      </ImageBackground>
-    </View>
+    <BackgroundContainer>
+      <View onPres={() => console.log('touch')} style={styles.currentTurnContainer}>
+        <Text style={styles.currentTurn}>Current turn: </Text>
+        <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? 'blue' : 'red', fontWeight: '700' }]}>
+          {currentTurn.toLocaleUpperCase()}
+        </Text>
+      </View>
+      <View style={styles.gridContainer}>
+        {grid.map((row, rowIndex) => (
+          <View key={`row-${rowIndex}`} style={styles.row}>
+            {row.map((cell, columnIndex) => (
+              <Cell
+                key={`row-${rowIndex}-column-${columnIndex}`}
+                onPress={() => onPress(rowIndex, columnIndex)}
+                cell={cell}
+              />
+            ))}
+          </View>
+        ))}
+      </View>
+      <AlertModal
+        visible={!!message}
+        message={message}
+        button
+        onPressButton={resetGame}
+      />
+    </BackgroundContainer>
   )
 }
 
