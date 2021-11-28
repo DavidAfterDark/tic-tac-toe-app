@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     borderRadius: 50,
-    borderColor: 'white',
+    borderColor: 'red',
     borderWidth: 10
   }
 })

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 10,
     height: 75,
-    backgroundColor: 'white',
+    backgroundColor: 'blue',
     borderRadius: 10,
     transform: [{
       rotate: '45deg'
