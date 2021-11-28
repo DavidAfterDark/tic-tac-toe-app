@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Game from './src/screens/Game'
+import Navigation from './src/navigation'
 
 export default function App () {
   return (
-    <Game />
+    <Navigation />
   )
 }
