@@ -187,7 +187,7 @@ const Game = () => {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor='transparent' barStyle='light-content' />
       <ImageBackground source={background} style={styles.background} resizeMode='contain'>
-        <View style={styles.currentTurnContainer}>
+        <View onPres={() => console.log('touch')} style={styles.currentTurnContainer}>
           <Text style={styles.currentTurn}>Current turn: </Text>
           <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? 'blue' : 'red', fontWeight: '700' }]}>
             {currentTurn.toLocaleUpperCase()}
