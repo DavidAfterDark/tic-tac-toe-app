@@ -13,7 +13,7 @@ const BackgroundContainer = ({ children }) => {
         style={styles.background}
         source={background}
         resizeMode='contain'
-        blurRadius={route.name === 'MainMenu' ? 10 : 0}
+        blurRadius={route.name === 'MainMenu' || route.name === 'MultiplayerMenu' ? 10 : 0}
       >
         {children}
       </ImageBackground>
