@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 50,
     letterSpacing: 5,
-    marginTop: 45,
-    marginBottom: 145
+    marginTop: 75,
+    marginBottom: 105
   },
 
   buttomStyle: {
