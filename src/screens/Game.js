@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { useRoute, useNavigation } from '@react-navigation/native'
+import { BOT_EASY, BOT_MEDIUM, MULTI_PLAYER } from '../constants'
 
 //  components
 import BackgroundContainer from '../components/BackgroundContainer'
+import Header from '../components/Header'
 import AlertModal from '../components/AlertModal'
 import Cell from '../components/Cell'
 
 //  utils
 import { copyArray } from '../utils/copyArray'
+import Buttom from '../components/Buttom'
 
 const Game = () => {
+  const route = useRoute()
+  const params = route.params
+  const navigation = useNavigation()
+
+  console.log(params)
+
   const initialState = [
     ['', '', ''], // 1st row
     ['', '', ''], // 2st row
@@ -22,8 +32,10 @@ const Game = () => {
 
   const [message, setMessage] = useState('')
 
+  const [botDifficulty, setBotDifficulty] = useState(BOT_EASY)
+
   useEffect(() => {
-    if (currentTurn === 'o') {
+    if (currentTurn === 'o' && params.type !== MULTI_PLAYER) {
       setTimeout(() => {
         botTurn()
       }, 500)
@@ -141,36 +153,38 @@ const Game = () => {
 
     let chooseOptions
 
-    //  ↓↓↓ check if the opponents Wins if it takes one of the possible positions ↓↓↓
+    if (botDifficulty === BOT_MEDIUM) {
+      //  ↓↓↓ check if the opponents Wins if it takes one of the possible positions ↓↓↓
 
-    //  attack
-    possibleOptions.forEach((possibleOption) => {
-      const copyGrid = copyArray(grid)
-
-      copyGrid[possibleOption.row][possibleOption.col] = 'o'
-
-      const winner = getWinner(copyGrid)
-
-      if (winner === 'o') {
-        //  attack that position
-        chooseOptions = possibleOption
-      }
-    })
-
-    if (!chooseOptions) {
-      //  defend
+      //  attack
       possibleOptions.forEach((possibleOption) => {
         const copyGrid = copyArray(grid)
 
-        copyGrid[possibleOption.row][possibleOption.col] = 'x'
+        copyGrid[possibleOption.row][possibleOption.col] = 'o'
 
         const winner = getWinner(copyGrid)
 
-        if (winner === 'x') {
-          //  defend that position
+        if (winner === 'o') {
+        //  attack that position
           chooseOptions = possibleOption
         }
       })
+
+      if (!chooseOptions) {
+      //  defend
+        possibleOptions.forEach((possibleOption) => {
+          const copyGrid = copyArray(grid)
+
+          copyGrid[possibleOption.row][possibleOption.col] = 'x'
+
+          const winner = getWinner(copyGrid)
+
+          if (winner === 'x') {
+          //  defend that position
+            chooseOptions = possibleOption
+          }
+        })
+      }
     }
 
     //  choose random
@@ -183,14 +197,15 @@ const Game = () => {
     }
   }
 
+  const goBack = () => navigation.goBack()
+
+  const setEasyBot = () => setBotDifficulty(BOT_EASY)
+
+  const setMediumBot = () => setBotDifficulty(BOT_MEDIUM)
+
   return (
     <BackgroundContainer>
-      <View onPres={() => console.log('touch')} style={styles.currentTurnContainer}>
-        <Text style={styles.currentTurn}>Current turn: </Text>
-        <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? 'blue' : 'red', fontWeight: '700' }]}>
-          {currentTurn.toLocaleUpperCase()}
-        </Text>
-      </View>
+      <Header currentTurn={currentTurn} onPressBack={goBack} />
       <View style={styles.gridContainer}>
         {grid.map((row, rowIndex) => (
           <View key={`row-${rowIndex}`} style={styles.row}>
@@ -204,6 +219,28 @@ const Game = () => {
           </View>
         ))}
       </View>
+      <View style={styles.buttonGroup}>
+        <Buttom
+          onPress={setEasyBot}
+          text='Easy'
+          textStyle={styles.buttonText}
+          buttomStyle={[
+            styles.button,
+            styles.buttonEasy,
+            { backgroundColor: botDifficulty === BOT_EASY ? '#4F5686' : '#191F24' }
+          ]}
+        />
+        <Buttom
+          onPress={setMediumBot}
+          text='Medium'
+          textStyle={styles.buttonText}
+          buttomStyle={[
+            styles.button,
+            { backgroundColor: botDifficulty === BOT_MEDIUM ? '#4F5686' : '#191F24' }
+          ]}
+        />
+      </View>
+
       <AlertModal
         visible={!!message}
         message={message}
@@ -215,32 +252,6 @@ const Game = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#242D34'
-  },
-
-  background: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 18
-  },
-
-  currentTurnContainer: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 50
-  },
-
-  currentTurn: {
-    fontSize: 32,
-    color: '#fff'
-  },
-
   gridContainer: {
     width: '85%',
     aspectRatio: 1
@@ -250,6 +261,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     margin: 4
+  },
+
+  buttonGroup: {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 50
+  },
+
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20
+  },
+
+  buttonText: {
+    fontSize: 20
+  },
+
+  buttonEasy: {
+    marginRight: 50
   }
 })
 
