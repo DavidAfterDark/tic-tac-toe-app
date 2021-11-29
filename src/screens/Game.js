@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { useRoute, useNavigation } from '@react-navigation/native'
-import { BOT_EASY, BOT_MEDIUM, MULTI_PLAYER } from '../constants'
+import { View, StyleSheet, Text, StatusBar } from 'react-native'
+import { useRoute } from '@react-navigation/native'
+import { BOT_EASY, BOT_MEDIUM, MULTI_PLAYER, SINGLE_PLAYER } from '../constants'
 
 //  components
 import BackgroundContainer from '../components/BackgroundContainer'
-import Header from '../components/Header'
 import AlertModal from '../components/AlertModal'
 import Cell from '../components/Cell'
 
@@ -16,7 +15,6 @@ import Buttom from '../components/Buttom'
 const Game = () => {
   const route = useRoute()
   const params = route.params
-  const navigation = useNavigation()
 
   console.log(params)
 
@@ -197,15 +195,18 @@ const Game = () => {
     }
   }
 
-  const goBack = () => navigation.goBack()
-
   const setEasyBot = () => setBotDifficulty(BOT_EASY)
 
   const setMediumBot = () => setBotDifficulty(BOT_MEDIUM)
 
   return (
     <BackgroundContainer>
-      <Header currentTurn={currentTurn} onPressBack={goBack} />
+      <View style={styles.currentTurnContainer}>
+        <Text style={styles.currentTurn}>Current turn:   </Text>
+        <Text style={[styles.currentTurn, { color: currentTurn === 'x' ? '#1d5df2' : 'red', fontWeight: '700' }]}>
+          {currentTurn.toLocaleUpperCase()}
+        </Text>
+      </View>
       <View style={styles.gridContainer}>
         {grid.map((row, rowIndex) => (
           <View key={`row-${rowIndex}`} style={styles.row}>
@@ -219,27 +220,32 @@ const Game = () => {
           </View>
         ))}
       </View>
-      <View style={styles.buttonGroup}>
-        <Buttom
-          onPress={setEasyBot}
-          text='Easy'
-          textStyle={styles.buttonText}
-          buttomStyle={[
-            styles.button,
-            styles.buttonEasy,
-            { backgroundColor: botDifficulty === BOT_EASY ? '#4F5686' : '#191F24' }
-          ]}
-        />
-        <Buttom
-          onPress={setMediumBot}
-          text='Medium'
-          textStyle={styles.buttonText}
-          buttomStyle={[
-            styles.button,
-            { backgroundColor: botDifficulty === BOT_MEDIUM ? '#4F5686' : '#191F24' }
-          ]}
-        />
-      </View>
+
+      {
+        params.type === SINGLE_PLAYER && (
+          <View style={styles.buttonGroup}>
+            <Buttom
+              onPress={setEasyBot}
+              text='Easy'
+              textStyle={styles.buttonText}
+              buttomStyle={[
+                styles.button,
+                styles.buttonEasy,
+                { backgroundColor: botDifficulty === BOT_EASY ? '#4F5686' : '#191F24' }
+              ]}
+            />
+            <Buttom
+              onPress={setMediumBot}
+              text='Medium'
+              textStyle={styles.buttonText}
+              buttomStyle={[
+                styles.button,
+                { backgroundColor: botDifficulty === BOT_MEDIUM ? '#4F5686' : '#191F24' }
+              ]}
+            />
+          </View>
+        )
+      }
 
       <AlertModal
         visible={!!message}
@@ -252,6 +258,17 @@ const Game = () => {
 }
 
 const styles = StyleSheet.create({
+  currentTurnContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: StatusBar.currentHeight + 75
+  },
+
+  currentTurn: {
+    fontSize: 20,
+    color: '#ffffff70'
+  },
+
   gridContainer: {
     width: '85%',
     aspectRatio: 1
