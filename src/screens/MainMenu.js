@@ -12,7 +12,7 @@ const MainMenu = () => {
 
   const goSinglePlayerGame = () => navigation.navigate('Game', { type: SINGLE_PLAYER })
 
-  const goMultiPlayerGame = () => navigation.navigate('Game', { type: MULTI_PLAYER })
+  const goMultiPlayerGame = () => navigation.navigate('MultiplayerMenu', { type: MULTI_PLAYER })
 
   return (
     <BackgroundContainer>
