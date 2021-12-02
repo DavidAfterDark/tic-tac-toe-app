@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View } from 'react-native'
-import { MULTI_PLAYER, SINGLE_PLAYER } from '../constants'
+import { SINGLE_PLAYER, MULTI_PLAYER } from '../constants'
 
 //  components
 import BackgroundContainer from '../components/BackgroundContainer'
@@ -45,9 +45,10 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 50,
-    letterSpacing: 5,
+    fontWeight: 'bold',
+    letterSpacing: 2,
     marginTop: 75,
-    marginBottom: 105
+    marginBottom: '40%'
   },
 
   buttomStyle: {

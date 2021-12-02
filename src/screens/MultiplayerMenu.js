@@ -5,11 +5,12 @@ import { useNavigation } from '@react-navigation/native'
 //  components
 import BackgroundContainer from '../components/BackgroundContainer'
 import Buttom from '../components/Buttom'
+import { MULTI_PLAYER, LOCAL } from '../constants'
 
 const MultiplayerMenu = () => {
   const navigation = useNavigation()
 
-  const goLocalMode = () => navigation.navigate('Game')
+  const goLocalMode = () => navigation.navigate('Game', { type: MULTI_PLAYER, mode: LOCAL })
 
   return (
     <BackgroundContainer>

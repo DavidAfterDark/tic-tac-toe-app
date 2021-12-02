@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { SINGLE_PLAYER, MULTI_PLAYER, LOCAL } from '../constants'
 
 //  screens
 import MainMenu from '../screens/MainMenu'
@@ -36,15 +37,15 @@ const Navigation = () => {
         <Stack.Screen
           name='Game'
           component={Game}
-          options={{
-            title: 'Single Player',
+          options={({ route }) => ({
+            title: route.params?.type === SINGLE_PLAYER ? 'Single Player' : route.params?.type === MULTI_PLAYER && route.params?.mode === LOCAL ? 'Local' : 'Online',
             headerBackButtonMenuEnabled: true,
             headerTransparent: true,
             headerTintColor: '#fff',
             headerShadowVisible: false,
             headerTitleAlign: 'center',
             headerTitleStyle: { fontSize: 22 }
-          }}
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
