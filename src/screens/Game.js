@@ -33,7 +33,7 @@ const Game = () => {
   const [botDifficulty, setBotDifficulty] = useState(BOT_EASY)
 
   useEffect(() => {
-    if (currentTurn === 'o' && params.type !== MULTI_PLAYER) {
+    if (currentTurn === 'o' && params?.type !== MULTI_PLAYER) {
       setTimeout(() => {
         botTurn()
       }, 500)
@@ -222,7 +222,7 @@ const Game = () => {
       </View>
 
       {
-        params.type === SINGLE_PLAYER && (
+        params?.type === SINGLE_PLAYER && (
           <View style={styles.buttonGroup}>
             <Buttom
               onPress={setEasyBot}
