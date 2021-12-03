@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View } from 'react-native'
 import { SINGLE_PLAYER, MULTI_PLAYER } from '../constants'
+import { withAuthenticator } from 'aws-amplify-react-native'
 
 //  components
 import BackgroundContainer from '../components/BackgroundContainer'
@@ -35,7 +36,7 @@ const MainMenu = () => {
   )
 }
 
-export default MainMenu
+export default withAuthenticator(MainMenu)
 
 const styles = StyleSheet.create({
   container: {
@@ -45,7 +46,8 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 50,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    color: '#FFFFFF',
     letterSpacing: 2,
     marginTop: 75,
     marginBottom: '40%'
